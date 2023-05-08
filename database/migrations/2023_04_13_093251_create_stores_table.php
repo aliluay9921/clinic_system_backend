@@ -24,7 +24,7 @@ return new class extends Migration
             $table->uuid("clinic_id");
             $table->uuid("representative_id")->nullable();
             $table->date("expaired");
-            $table->text("note");
+            $table->text("note")->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

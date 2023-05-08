@@ -17,7 +17,11 @@ class UserController extends Controller
     use SendResponse, Pagination, UploadImage, Search, Filter, OrderBy;
     public function getUsers()
     {
-        $users = User::select("*");
+        if (auth()->user()->user_type == 0) {
+            $users = User::select("*");
+        } else {
+            $users = User::select("*")->where("clinic_id", auth()->user()->clinic_id);
+        }
         if (isset($_GET["query"])) {
             $this->search($users, 'users');
         }

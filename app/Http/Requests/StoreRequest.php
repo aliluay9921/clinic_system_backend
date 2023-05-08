@@ -33,7 +33,7 @@ class StoreRequest extends FormRequest
                 'quantity' => 'required',
                 'price' => 'required',
                 'expaired' => 'required|date|after_or_equal:today',
-                'representatives_id' => 'exists:representativess,id'
+                'representative_id' => 'exists:representatives,id'
             ];
         } else if ($this->method() == "PUT") {
             return [
@@ -42,7 +42,7 @@ class StoreRequest extends FormRequest
                 'quantity' => 'required',
                 'price' => 'required',
                 'expaired' => 'required',
-                'representatives_id' => 'exists:representativess,id'
+                'representative_id' => 'exists:representatives,id'
 
             ];
         } else {

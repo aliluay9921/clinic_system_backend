@@ -229,6 +229,14 @@ class BookingController extends Controller
         return $this->send_response("200", 'تم حذف الدين بنجاح', [], []);
     }
 
+
+    // public function getArchives(Request $request)
+    // {
+    //     $debts = Archive::where("clinic_id", auth()->user()->clinic_id)->get();
+    //     return $this->send_response("200", 'تم جلب الديون بنجاح', [], $debts);
+    // }
+
+
     public function addArchive(Request $request)
     {
         $request = $request->json()->all();

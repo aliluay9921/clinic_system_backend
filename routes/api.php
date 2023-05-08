@@ -32,19 +32,18 @@ route::post("login", [AuthController::class, "login"]);
 // route::post("register", [AuthController::class, "register"]);
 
 Route::middleware(['auth:api'])->group(function () {
-
+    Route::controller(UserController::class)->group(function () {
+        Route::get('get_users', 'getUsers');
+        Route::post('add_user', 'addUser');
+        Route::put('edit_user', 'editUser');
+        Route::delete('delete_user', 'deleteUser');
+    });
     Route::middleware('manager')->group(function () {
         Route::controller(ClinicController::class)->group(function () {
             Route::get('get_clinics', 'getClinics');
             Route::post('add_clinic', 'addClinic');
             Route::put('edit_clinic', 'editClinic');
             Route::delete('delete_clinic', 'deleteClinic');
-        });
-        Route::controller(UserController::class)->group(function () {
-            Route::get('get_users', 'getUsers');
-            Route::post('add_user', 'addUser');
-            Route::put('edit_user', 'editUser');
-            Route::delete('delete_user', 'deleteUser');
         });
     });
 
@@ -81,6 +80,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::delete('delete_booking', 'deleteBooking');
         Route::delete('delete_debt', 'deleteDebt');
         Route::post("add_archive", 'addArchive');
+        Route::get("get_archives", "getArchives");
     });
 
     Route::post("add_to_log", [LogController::class, 'addToLog']);

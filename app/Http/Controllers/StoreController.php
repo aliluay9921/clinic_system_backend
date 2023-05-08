@@ -58,7 +58,7 @@ class StoreController extends Controller
         $data['clinic_id'] = auth()->user()->clinic_id;
 
         $store = Store::create($data);
-        return $this->send_response(200, 'تمت أضافة منتج بنجاح', Store::find($store->id));
+        return $this->send_response(200, 'تمت أضافة منتج بنجاح', [], Store::find($store->id));
     }
 
     public function updateStore(StoreRequest $request)
@@ -68,7 +68,7 @@ class StoreController extends Controller
 
         $data = [];
         if (array_key_exists('image', $request)) {
-            $data['image'] = $this->uploadPicture($request['image'], 'stores');
+            $data['image'] = $this->uploadPicture($request['image'], '/images/stores');
         }
 
         $data['product_name'] = $request['product_name'];
@@ -79,11 +79,11 @@ class StoreController extends Controller
         $data['representative_id'] = $request['representative_id'] ?? $store->representative_id;
         $data['company'] = $request['company'] ?? $store->company;
         $data['note'] = $request['note'] ?? $store->note;
-        $data['description'] = $request['dexdescription'] ?? $store->description;
+        $data['description'] = $request['description'] ?? $store->description;
         $data['clinic_id'] = auth()->user()->clinic_id;
 
         $store->update($data);
-        return $this->send_response(200, 'تمت تعديل منتج بنجاح', Store::find($store->id));
+        return $this->send_response(200, 'تمت تعديل منتج بنجاح', [], Store::find($store->id));
     }
 
     public function deleteStore(StoreRequest $request)
