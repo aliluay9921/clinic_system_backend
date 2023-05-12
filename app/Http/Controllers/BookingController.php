@@ -150,7 +150,7 @@ class BookingController extends Controller
             }
         }
         if ($request["payment_method"] == 1) {
-            // في حالة تم تقسيط المبلغ  
+            // في حالة تم تقسيط المبلغ
 
             if ($booking->price == $request["price"]) {
                 Log::create([

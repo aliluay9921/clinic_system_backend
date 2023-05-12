@@ -54,7 +54,7 @@ class StoreController extends Controller
         $data['representative_id'] = $request['representative_id'] ?? null;
         $data['company'] = $request['company'] ?? null;
         $data['note'] = $request['note'] ?? null;
-        $data['description'] = $request['dexdescription'] ?? null;
+        $data['description'] = $request['description'] ?? null;
         $data['clinic_id'] = auth()->user()->clinic_id;
 
         $store = Store::create($data);
