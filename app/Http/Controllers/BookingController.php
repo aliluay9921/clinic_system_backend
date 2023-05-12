@@ -14,6 +14,7 @@ use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\BookingRequest;
 use App\Models\Log;
+use App\Models\orderDoctorPharmcy;
 
 class BookingController extends Controller
 {
@@ -42,11 +43,11 @@ class BookingController extends Controller
         }
 
         if (isset($_GET["filter"])) {
-            $bookings = $this->filter($bookings, 'bookings');
+            $bookings = $this->filter($bookings, $_GET["filter"]);
         }
 
         if (isset($_GET["order_by"])) {
-            $bookings = $this->orderBy($bookings, 'bookings');
+            $bookings = $this->order_by($bookings, $_GET);
         }
 
         if (!isset($_GET['skip']))
@@ -96,7 +97,7 @@ class BookingController extends Controller
                 "clinic_id" => auth()->user()->clinic_id,
                 "booking_id" => $booking->id,
                 "value_paid" => $request["value_paid"],
-                "all_value_paid" => 0,
+                "all_value_paid" => 0,  // مجموع الدفعات 
                 "value_remaining" => $request["price"] - $request["value_paid"],
                 "note" => "دفعة مقدمة",
                 "payment_date" => date("Y-m-d"),
@@ -230,25 +231,54 @@ class BookingController extends Controller
     }
 
 
-    // public function getArchives(Request $request)
-    // {
-    //     $debts = Archive::where("clinic_id", auth()->user()->clinic_id)->get();
-    //     return $this->send_response("200", 'تم جلب الديون بنجاح', [], $debts);
-    // }
+    public function getArchives()
+    {
+        $archives = Archive::where("clinic_id", auth()->user()->clinic_id);
+        if (isset($_GET["query"])) {
+            $archives = $this->search($archives, 'archives');
+        }
+        if (isset($_GET["filter"])) {
+            $archives = $this->filter($archives, $_GET["filter"]);
+        }
+        if (isset($_GET["order_by"])) {
+            $archives = $this->order_by($archives, $_GET);
+        }
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
 
-
+        $res = $this->paging($archives->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب الارشيف بنجاح', [], $res["model"], null, $res["count"]);
+    }
     public function addArchive(Request $request)
+    {
+        $request = $request->json()->all();
+        $booking = Booking::find($request["booking_id"]);
+        $booking->update([
+            "booking_status" => 1
+        ]);
+        $data = [];
+        $data["clinic_id"] = auth()->user()->clinic_id;
+        $data["booking_id"] = $request["booking_id"];
+        $data["note"] = $request["note"] ?? null;
+        $data["another_time_booking"] = $request["another_time_booking"] ?? null;
+        $data["diagnosis"] = $request["diagnosis"] ?? $booking->primary_diagonses;
+        $archive = Archive::create($data);
+        return $this->send_response("200", 'تم اضافة الارشيف بنجاح', [], $archive);
+    }
+
+
+
+    public function orderDoctorToPharmcy(Request $request)
     {
         $request = $request->json()->all();
         $data = [];
         $data["clinic_id"] = auth()->user()->clinic_id;
+        $data["doctor_id"] = auth()->user()->id;
         $data["booking_id"] = $request["booking_id"];
-        $data["note"] = $request["note"];
-        $data["another_time_booking"] = $request["another_time_booking"];
-        $data["chronic_diseases"] = $request["chronic_diseases"];
-        $data["diagnosis"] = $request["diagnosis"];
-
-        $archive = Archive::create($data);
-        return $this->send_response("200", 'تم اضافة الارشيف بنجاح', [], $archive);
+        $data["medicens"] = json_encode($request["medicens"]);
+        $order = orderDoctorPharmcy::create($data);
+        return $this->send_response("200", ' تم التحويل الى الصيدلية', [], $order);
     }
 }

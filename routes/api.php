@@ -7,6 +7,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\RepresentativeController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
@@ -38,6 +39,13 @@ Route::middleware(['auth:api'])->group(function () {
         Route::put('edit_user', 'editUser');
         Route::delete('delete_user', 'deleteUser');
     });
+    Route::controller(RepresentativeController::class)->group(function () {
+        Route::get('get_representatives', 'getRepresentatives');
+        Route::post('add_representative', 'addRepresentative');
+        Route::put('edit_representative', 'editRepresentative');
+        Route::delete('delete_representative', 'deleteRepresentative');
+    });
+
     Route::middleware('manager')->group(function () {
         Route::controller(ClinicController::class)->group(function () {
             Route::get('get_clinics', 'getClinics');
@@ -48,13 +56,6 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
     Route::middleware('admin_clinic')->group(function () {
-        Route::controller(RepresentativeController::class)->group(function () {
-            Route::get('get_representatives', 'getRepresentatives');
-            Route::post('add_representative', 'addRepresentative');
-            Route::put('edit_representative', 'editRepresentative');
-            Route::delete('delete_representative', 'deleteRepresentative');
-        });
-
         Route::controller(EmployeeController::class)->group(function () {
             Route::get('get_employees', 'getEmployees');
             Route::post('add_employee', 'addEmployee');
@@ -81,7 +82,20 @@ Route::middleware(['auth:api'])->group(function () {
         Route::delete('delete_debt', 'deleteDebt');
         Route::post("add_archive", 'addArchive');
         Route::get("get_archives", "getArchives");
+        Route::post("order_doctor_to_pharmcy", "orderDoctorToPharmcy");
     });
+    Route::controller(PharmacyController::class)->group(function () {
+        Route::get('get_pharmacy', 'getPharmacy');
+        Route::post('add_to_pharmacy', 'addToPharmacy');
+        Route::put('edit_pharmacy', 'editPharmacy');
+        Route::delete('delete_pharmacy', 'deletePharmacy');
+
+        Route::get("get_orders_doctor_to_paharmcy", "getOrderDoctorToPharmcy");
+        Route::post("make_order_pharmcy", "makeOrderPharmcy");
+        Route::get("get_orders_pharmcy", "getOrderPharmcy");
+    });
+
+
 
     Route::post("add_to_log", [LogController::class, 'addToLog']);
     Route::get("get_logs", [LogController::class, 'getLogs']);

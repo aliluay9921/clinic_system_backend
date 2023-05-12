@@ -28,7 +28,7 @@ return new class extends Migration
             $table->uuid("doctor_id");
             $table->string("booking_time")->nullable();
             $table->date("booking_date")->nullable();
-            $table->string("booking_status")->default(0); // 0 pending 1 to doctor 2 to archive
+            $table->string("booking_status")->default(0); // 0 pending  to doctor 1 to archive
             $table->string("booking_note")->nullable();
             $table->string("primary_diagonses")->nullable();
             $table->boolean("status_paid"); // check booking paid or debt

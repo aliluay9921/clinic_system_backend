@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('archives', function (Blueprint $table) {
+        Schema::create('order_doctor_pharmcies', function (Blueprint $table) {
             $table->uuid("id")->primary();
-            $table->uuid("booking_id");
             $table->uuid("clinic_id");
-            $table->string("diagnosis")->nullable();
-            $table->date("another_time_booking")->nullable();
-            $table->text("note")->nullable();
+            $table->uuid("doctor_id");
+            $table->json("medicens");
+            $table->uuid("booking_id");
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('archives');
+        Schema::dropIfExists('order_doctor_pharmcies');
     }
 };
