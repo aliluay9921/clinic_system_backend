@@ -16,6 +16,7 @@ class User extends Authenticatable
 
     protected $guarded = [];
     protected $date = ["deleted_at"];
+    protected $with = ['clinic'];
     protected $hidden = [
         'password',
         'remember_token',

@@ -11,6 +11,7 @@ class Booking extends Model
     use HasFactory, Uuids;
 
     protected $guarded = [];
+    protected $with = ["doctor"];
 
     public function clinic()
     {

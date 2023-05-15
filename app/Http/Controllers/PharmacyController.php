@@ -59,7 +59,7 @@ class PharmacyController extends Controller
         $data['representative_id'] = $request['representative_id'] ?? null;
         $data['clinic_id'] = auth()->user()->clinic_id;
         $pharmacy_store = PharmacyStore::create($data);
-        return $this->send_response(200, 'تم اضافة الدواء بنجاح', [], $pharmacy_store);
+        return $this->send_response(200, 'تم اضافة الدواء بنجاح', [], PharmacyStore::with('represntatives')->find($pharmacy_store));
     }
 
     public function editPharmacy(PharmcyRequest $request)
@@ -132,7 +132,8 @@ class PharmacyController extends Controller
         return $this->send_response(200, 'تم ارسال الطلب بنجاح', [], $order);
     }
 
-    public function getOrderPharmcy(){
+    public function getOrderPharmcy()
+    {
         $orders = orderPharmcy::where("clinic_id", auth()->user()->clinic_id);
         if (isset($_GET["query"])) {
             $orders = $this->search($orders, 'order_pharmcies');

@@ -36,7 +36,7 @@ class BookingController extends Controller
             $booking = Booking::with("debts")->find($_GET["booking_id"]);
             return $this->send_response(200, 'تم جلب سجل الديون الخاص بهذا الحجز بنجاح', [], $booking);
         }
-        $bookings = Booking::with("doctor")->where("clinic_id", auth()->user()->clinic_id);
+        $bookings = Booking::where("clinic_id", auth()->user()->clinic_id);
 
         if (isset($_GET["query"])) {
             $bookings = $this->search($bookings, 'bookings');
@@ -45,6 +45,7 @@ class BookingController extends Controller
         if (isset($_GET["filter"])) {
             $bookings = $this->filter($bookings, $_GET["filter"]);
         }
+
 
         if (isset($_GET["order_by"])) {
             $bookings = $this->order_by($bookings, $_GET);
@@ -267,9 +268,6 @@ class BookingController extends Controller
         $archive = Archive::create($data);
         return $this->send_response("200", 'تم اضافة الارشيف بنجاح', [], $archive);
     }
-
-
-
     public function orderDoctorToPharmcy(Request $request)
     {
         $request = $request->json()->all();
@@ -280,5 +278,26 @@ class BookingController extends Controller
         $data["medicens"] = json_encode($request["medicens"]);
         $order = orderDoctorPharmcy::create($data);
         return $this->send_response("200", ' تم التحويل الى الصيدلية', [], $order);
+    }
+
+    public function getDebts()
+    {
+        $debts = Debt::where("clinic_id", auth()->user()->clinic_id);
+        if (isset($_GET["query"])) {
+            $debts = $this->search($debts, 'debts');
+        }
+        if (isset($_GET["filter"])) {
+            $debts = $this->filter($debts, $_GET["filter"]);
+        }
+        if (isset($_GET["order_by"])) {
+            $debts = $this->order_by($debts, $_GET);
+        }
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+
+        $res = $this->paging($debts->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب الديون بنجاح', [], $res["model"], null, $res["count"]);
     }
 }

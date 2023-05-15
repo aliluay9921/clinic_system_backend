@@ -11,6 +11,7 @@ class Debt extends Model
     use HasFactory, Uuids;
 
     protected $guarded = [];
+    protected $with = ["booking"];
 
     public function booking()
     {

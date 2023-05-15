@@ -83,6 +83,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post("add_archive", 'addArchive');
         Route::get("get_archives", "getArchives");
         Route::post("order_doctor_to_pharmcy", "orderDoctorToPharmcy");
+        Route::get("get_debts", "getDebts");
     });
     Route::controller(PharmacyController::class)->group(function () {
         Route::get('get_pharmacy', 'getPharmacy');

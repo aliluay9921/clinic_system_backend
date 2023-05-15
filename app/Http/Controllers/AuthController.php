@@ -42,6 +42,7 @@ class AuthController extends Controller
         $validator = Validator::make($request, [
             'phone_number' => 'required|unique:users,phone_number',
             'user_name' => 'required|unique:users,user_name',
+            'name' => 'required',
             'password' => 'required',
             'clinic_id' => 'required',
         ], [
@@ -50,7 +51,8 @@ class AuthController extends Controller
             'phone_number.unique' => 'رقم الهاتف الذي قمت بأدخاله تم استخدامه سابقاً',
             'user_name.unique' => 'اسم المستخدم الذي قمت بأدخاله تم استخدامه سابقاً',
             'password.required' => 'يرجى ادخال كلمة المرور ',
-            'clinic_id.required' => 'يرجى ادخال العيادة'
+            'clinic_id.required' => 'يرجى ادخال العيادة',
+            'name.required' => 'يرجى ادخال الاسم',
         ]);
         if ($validator->fails()) {
             return $this->send_response(400, "حصل خطأ في المدخلات", $validator->errors(), []);
@@ -61,6 +63,7 @@ class AuthController extends Controller
             'phone_number' => $request['phone_number'],
             'clinic_id' => $request['clinic_id'],
             'password' => bcrypt($request['password']),
+            'name' => $request['name'],
             'user_type' => 1,
         ];
 
