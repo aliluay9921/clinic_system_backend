@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Debt;
 use App\Traits\Filter;
 use App\Traits\Search;
@@ -12,9 +13,9 @@ use App\Traits\Pagination;
 use App\Traits\UploadImage;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\BookingRequest;
-use App\Models\Log;
 use App\Models\orderDoctorPharmcy;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\BookingRequest;
 
 class BookingController extends Controller
 {
@@ -43,9 +44,14 @@ class BookingController extends Controller
         }
 
         if (isset($_GET["filter"])) {
+            $filter = json_decode($_GET["filter"]);
             $bookings = $this->filter($bookings, $_GET["filter"]);
         }
+        if (isset($_GET["filter_date"])) {
 
+            $filter = json_decode($_GET["filter_date"]);
+            $bookings = $bookings->whereBetween("created_at", [$filter->start_date, $filter->end_date]);
+        }
 
         if (isset($_GET["order_by"])) {
             $bookings = $this->order_by($bookings, $_GET);
@@ -283,6 +289,8 @@ class BookingController extends Controller
     public function getDebts()
     {
         $debts = Debt::where("clinic_id", auth()->user()->clinic_id);
+
+
         if (isset($_GET["query"])) {
             $debts = $this->search($debts, 'debts');
         }

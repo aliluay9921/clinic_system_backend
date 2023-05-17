@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('order_pharmcies', function (Blueprint $table) {
             $table->uuid("id")->primary();
             $table->uuid("clinic_id");
-            $table->string("patint_name");
-            $table->string("patint_age");
-            $table->boolean("gender");
+            $table->string("patint_name")->nullable();
+            $table->string("patint_age")->nullable();
+            $table->boolean("gender")->nullable();
             $table->double("total_cost");
             $table->text("note")->nullable();
             $table->timestamps();

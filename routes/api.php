@@ -62,14 +62,13 @@ Route::middleware(['auth:api'])->group(function () {
             Route::put('edit_employee', 'editEmployee');
             Route::delete('delete_employee', 'deleteEmployee');
         });
+    });
+    Route::controller(StoreController::class)->group(function () {
 
-        Route::controller(StoreController::class)->group(function () {
-
-            Route::get('get_stores', 'getStores');
-            Route::post('add_to_store', 'addToStore');
-            Route::put('edit_store', 'updateStore');
-            Route::delete('delete_store', 'deleteStore');
-        });
+        Route::get('get_stores', 'getStores');
+        Route::post('add_to_store', 'addToStore');
+        Route::put('edit_store', 'updateStore');
+        Route::delete('delete_store', 'deleteStore');
     });
 
     Route::controller(BookingController::class)->group(function () {

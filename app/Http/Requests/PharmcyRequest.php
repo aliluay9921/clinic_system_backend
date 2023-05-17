@@ -37,7 +37,7 @@ class PharmcyRequest extends FormRequest
             ];
         } else if ($this->method() == "PUT") {
             return [
-                "id" => "required|exists:pharmacy_stores",
+                "id" => "required|exists:pharmacy_stores," . $this->id,
                 'medicen_name' => 'required|unique:pharmacy_stores,medicen_name',
                 'quantity' => 'required',
                 'price' => 'required',
@@ -47,7 +47,7 @@ class PharmcyRequest extends FormRequest
             ];
         } else {
             return [
-                "id" => "required|exists:representatives",
+                "id" => "required|exists:pharmacy_stores",
             ];
         }
     }

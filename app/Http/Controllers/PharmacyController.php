@@ -7,12 +7,13 @@ use App\Traits\Search;
 use App\Traits\OrderBy;
 use App\Traits\Pagination;
 use App\Traits\UploadImage;
+use App\Models\orderPharmcy;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use App\Models\PharmacyStore;
 use App\Models\orderDoctorPharmcy;
 use App\Http\Requests\PharmcyRequest;
-use App\Models\orderPharmcy;
+use Illuminate\Support\Facades\Schema;
 
 class PharmacyController extends Controller
 {
@@ -64,9 +65,15 @@ class PharmacyController extends Controller
 
     public function editPharmacy(PharmcyRequest $request)
     {
-        $pharmacy_store = PharmacyStore::find($request->id);
+        $request = $request->json()->all();
+        $pharmacy_store = PharmacyStore::find($request['id']);
+
         if (auth()->user()->clinic_id === $pharmacy_store->clinic_id) {
-            $pharmacy_store->update($request->all());
+            if (array_key_exists('image', $request)) {
+                $request['image'] = $this->uploadPicture($request['image'], '/images/pharmacy/');
+            }
+
+            $pharmacy_store->update($request);
             return $this->send_response(200, 'تم تعديل الدواء بنجاح', [], PharmacyStore::find($pharmacy_store->id));
         }
         return $this->send_response(403, 'غير مسموح لك بالتعديل على  هذا الدواء', [], []);
@@ -86,7 +93,21 @@ class PharmacyController extends Controller
     {
         $orders = orderDoctorPharmcy::where("clinic_id", auth()->user()->clinic_id);
         if (isset($_GET["query"])) {
-            $orders = $this->search($orders, 'order_doctor_pharmcies');
+            // $orders = $this->search($orders, 'order_doctor_pharmcies');
+            $orders->where(function ($q) {
+                $columns = Schema::getColumnListing('order_doctor_pharmcies');
+                $q->whereHas("doctor", function ($query) {
+                    $query->Where('user_name', 'LIKE', '%' . $_GET['query'] . '%');
+                });
+
+
+                $q->orwhereHas("booking", function ($query) {
+                    $query->Where('booking_code', 'LIKE', '%' . $_GET['query'] . '%');
+                });
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+                }
+            });
         }
         if (isset($_GET["filter"])) {
             $orders = $this->filter($orders, $_GET["filter"]);
