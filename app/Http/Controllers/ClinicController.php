@@ -39,6 +39,9 @@ class ClinicController extends Controller
     public function addClinic(ClinicRequest $request)
     {
         $request = $request->json()->all();
+        if (array_key_exists('logo', $request)) {
+            $request['logo'] = $this->uploadPicture($request['logo'], '/images/logos/');
+        }
         $clinic = Clinic::create($request);
         return $this->send_response(200, 'تم إضافة العيادة بنجاح', [], Clinic::find($clinic->id));
     }
@@ -48,6 +51,9 @@ class ClinicController extends Controller
     {
         $request = $request->json()->all();
         $clinic = Clinic::find($request['id']);
+        if (array_key_exists('logo', $request)) {
+            $request['logo'] = $this->uploadPicture($request['logo'], '/images/logos/');
+        }
         $clinic->update($request);
         return $this->send_response(200, 'تم تعديل العيادة بنجاح', [], Clinic::find($clinic->id));
     }

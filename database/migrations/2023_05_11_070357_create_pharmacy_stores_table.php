@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string("company")->nullable();
             $table->string("image")->nullable();
             $table->string("quantity");
-            $table->string("price");
+            $table->double("price");
             $table->string("expaired");
             $table->string("note")->nullable();
             $table->string("description")->nullable();

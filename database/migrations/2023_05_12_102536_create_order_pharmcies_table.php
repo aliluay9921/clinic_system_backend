@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("patint_age")->nullable();
             $table->boolean("gender")->nullable();
             $table->double("total_cost");
+            $table->string("order_code");
             $table->text("note")->nullable();
             $table->timestamps();
         });

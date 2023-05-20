@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('medican_order', function (Blueprint $table) {
-            $table->id();
-            $table->uuid("order_id");
-            $table->uuid("medican_id");
-            $table->double("price");
-            $table->integer("quantity");
-            $table->timestamps();
+        Schema::table('clinics', function (Blueprint $table) {
+            $table->string('logo');
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('medican_order');
+        Schema::table('clinics', function (Blueprint $table) {
+            //
+        });
     }
 };

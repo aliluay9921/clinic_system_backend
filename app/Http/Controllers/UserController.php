@@ -52,6 +52,8 @@ class UserController extends Controller
         $request = $request->json()->all();
         $user = User::find($request["id"]);
         $request["password"] = bcrypt($request["password"]);
+
+
         $user->update($request);
         return $this->send_response(200, 'تم تعديل المستخدم بنجاح', [], User::find($user->id));
     }

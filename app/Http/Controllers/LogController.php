@@ -68,8 +68,15 @@ class LogController extends Controller
     public function addToLog(Request $request)
     {
         $request = $request->json()->all();
-        $request["clinic_id"] = auth()->user()->clinic_id;
-        $log = Log::create($request);
+        $data = [];
+        $data["target_id"] = $request["target_id"];
+        $data["log_type"] = $request["log_type"];
+        $data["note"] = $request["note"] ?? null;
+        $data["status"] = $request["status"]; // 0 withdraw  1 deposit
+        $data["value"] = $request["value"];
+        $data["clinic_id"] = auth()->user()->clinic_id;
+
+        $log = Log::create($data);
         return $this->send_response(200, 'تم إضافة السجل بنجاح', [], Log::find($log->id));
     }
 }

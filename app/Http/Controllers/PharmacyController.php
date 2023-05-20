@@ -19,6 +19,19 @@ class PharmacyController extends Controller
 {
     use SendResponse, Pagination, Search, UploadImage, Filter, OrderBy;
 
+
+    public function random_code()
+    {
+        $code = substr(str_shuffle("0123456789ABCDEFG"), 0, 6);
+        $get = orderPharmcy::where('order_code', $code)->first();
+        if ($get) {
+            return $this->random_code();
+        } else {
+            return $code;
+        }
+    }
+
+
     public function getPharmacy()
     {
         $medicean = PharmacyStore::with('represntatives')->where("clinic_id", auth()->user()->clinic_id);
@@ -133,6 +146,7 @@ class PharmacyController extends Controller
         $data['patint_name'] = $request["patint_name"];
         $data['patint_age'] = $request["patint_age"];
         $data['gender'] = $request["gender"];
+        $data['order_code'] = $this->random_code();
 
         foreach ($request["medicans"] as $medican) {
             $pharmacy_store = PharmacyStore::find($medican["id"]);
@@ -148,7 +162,9 @@ class PharmacyController extends Controller
         $data['note'] = $request['note'] ?? null;
         $order = orderPharmcy::create($data);
         foreach ($request["medicans"] as $medican) {
-            $order->medicans()->attach($medican["id"]);
+            $current_medican = PharmacyStore::find($medican["id"]);
+
+            $order->medicans()->attach($medican["id"], ['quantity' => $medican['quantity'], 'price' => $current_medican->price]);
         }
         return $this->send_response(200, 'تم ارسال الطلب بنجاح', [], $order);
     }

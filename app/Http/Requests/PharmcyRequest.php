@@ -37,8 +37,8 @@ class PharmcyRequest extends FormRequest
             ];
         } else if ($this->method() == "PUT") {
             return [
-                "id" => "required|exists:pharmacy_stores," . $this->id,
-                'medicen_name' => 'required|unique:pharmacy_stores,medicen_name',
+                "id" => "required|exists:pharmacy_stores",
+                'medicen_name' => 'required|unique:pharmacy_stores,medicen_name,' . $this->id,
                 'quantity' => 'required',
                 'price' => 'required',
                 'expaired' => 'required|date|after_or_equal:today',

@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Models\orderDoctorPharmcy;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\BookingRequest;
+use Illuminate\Support\Facades\Schema;
 
 class BookingController extends Controller
 {
@@ -40,6 +41,7 @@ class BookingController extends Controller
         $bookings = Booking::where("clinic_id", auth()->user()->clinic_id);
 
         if (isset($_GET["query"])) {
+
             $bookings = $this->search($bookings, 'bookings');
         }
 
@@ -292,7 +294,15 @@ class BookingController extends Controller
 
 
         if (isset($_GET["query"])) {
-            $debts = $this->search($debts, 'debts');
+            $debts->where(function ($q) {
+                $columns = Schema::getColumnListing('debts');
+                $q->orwhereHas("booking", function ($query) {
+                    $query->Where('booking_code', 'LIKE', '%' . $_GET['query'] . '%');
+                });
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $_GET['query'] . '%');
+                }
+            });
         }
         if (isset($_GET["filter"])) {
             $debts = $this->filter($debts, $_GET["filter"]);
