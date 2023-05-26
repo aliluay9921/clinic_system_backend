@@ -324,8 +324,7 @@ class BookingController extends Controller
     public function sendMessage(Request $request)
     {
         $request = $request->json()->all();
-        $clinic = Clinic::find($request["id"]);
-
-        return   $this->sendChatMessage($clinic->api_key, '07700459826', $request["message"]);
+        $api_key_clinic = auth()->user()->clinic->api_key;
+        return   $this->sendChatMessage($api_key_clinic, $request["phone_number_recipient"], $request["message"]);
     }
 }
