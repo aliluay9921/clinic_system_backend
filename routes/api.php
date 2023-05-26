@@ -97,7 +97,7 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
 
-    Route::post("get_image_clinic", "getImageClinic");
+    Route::post("get_image_clinic", [ClinicController::class, 'getImageClinic']);
     Route::post("add_to_log", [LogController::class, 'addToLog']);
     Route::get("get_logs", [LogController::class, 'getLogs']);
     Route::get("get_statistics", [LogController::class, "getStatistics"]);
