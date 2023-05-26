@@ -54,7 +54,7 @@ class BookingController extends Controller
         if (isset($_GET["filter_date"])) {
 
             $filter = json_decode($_GET["filter_date"]);
-            $bookings = $bookings->whereBetween("created_at", [$filter->start_date, $filter->end_date]);
+            $bookings = $bookings->whereBetween("booking_date", [$filter->start_date, $filter->end_date]);
         }
 
         if (isset($_GET["order_by"])) {

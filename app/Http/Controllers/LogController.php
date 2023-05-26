@@ -28,6 +28,12 @@ class LogController extends Controller
         if (isset($_GET)) {
             $this->order_by($logs, $_GET);
         }
+        if (isset($_GET["filter_date"])) {
+
+            $filter = json_decode($_GET["filter_date"]);
+            $logs = $logs->whereBetween("created_at", [$filter->start_date, $filter->end_date]);
+        }
+
         if (!isset($_GET['skip']))
             $_GET['skip'] = 0;
         if (!isset($_GET['limit']))
