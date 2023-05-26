@@ -226,7 +226,7 @@ class BookingController extends Controller
                 "target_id" => $booking->id,
                 "value" => $request["value_paid"],
                 "note" => "دفعة اقساط حجز",
-                "status" => 0,
+                "status" => 1,
                 "log_type" => 4
             ]);
             return $this->send_response(200, 'تم عملية  التسديد الدين بنجاح', [], $debt);

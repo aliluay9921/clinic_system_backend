@@ -64,4 +64,13 @@ class ClinicController extends Controller
         Clinic::find($request["id"])->delete();
         return $this->send_response(200, 'تم حذف العيادة بنجاح', [], []);
     }
+
+    public function get_image_clinic(Request $request)
+    {
+        $request = $request->json()->all();
+        $clinic = Clinic::find($request['id']);
+        $path = public_path() . $clinic->logo;
+        $base64Data = base64_encode(file_get_contents($path));
+        return $this->send_response(200, 'تم جلب صورة العيادة', [], $base64Data);
+    }
 }
