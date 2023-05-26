@@ -15,12 +15,14 @@ use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use App\Models\orderDoctorPharmcy;
 use Illuminate\Support\Facades\DB;
+use App\Traits\SendWhatsappMessage;
 use App\Http\Requests\BookingRequest;
+use App\Models\Clinic;
 use Illuminate\Support\Facades\Schema;
 
 class BookingController extends Controller
 {
-    use SendResponse, Pagination, UploadImage, Search, Filter, OrderBy;
+    use SendResponse, Pagination, UploadImage, Search, Filter, OrderBy, SendWhatsappMessage;
 
     public function random_code()
     {
@@ -317,5 +319,13 @@ class BookingController extends Controller
 
         $res = $this->paging($debts->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
         return $this->send_response(200, 'تم جلب الديون بنجاح', [], $res["model"], null, $res["count"]);
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $request = $request->json()->all();
+        $clinic = Clinic::find($request["id"]);
+
+        return   $this->sendChatMessage($clinic->api_key, '07700459826', $request["message"]);
     }
 }

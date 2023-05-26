@@ -143,9 +143,9 @@ class PharmacyController extends Controller
         $data = [];
         $total_cost = 0;
         $data['clinic_id'] = auth()->user()->clinic_id;
-        $data['patint_name'] = $request["patint_name"];
-        $data['patint_age'] = $request["patint_age"];
-        $data['gender'] = $request["gender"];
+        $data['patint_name'] = $request["patint_name"] ?? null;
+        $data['patint_age'] = $request["patint_age"] ?? null;
+        $data['gender'] = $request["gender"] ?? null;
         $data['order_code'] = $this->random_code();
 
         foreach ($request["medicans"] as $medican) {

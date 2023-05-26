@@ -10,11 +10,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ClinicRequest;
 use App\Traits\Filter;
 use App\Traits\OrderBy;
+use App\Traits\UploadImage;
 use Illuminate\Support\Facades\Schema;
 
 class ClinicController extends Controller
 {
-    use SendResponse, Pagination, Search, Filter, OrderBy;
+    use SendResponse, Pagination, Search, Filter, OrderBy, UploadImage;
 
     public function getClinics()
     {
