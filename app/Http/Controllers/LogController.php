@@ -69,7 +69,7 @@ class LogController extends Controller
     {
         $request = $request->json()->all();
         $data = [];
-        $data["target_id"] = $request["target_id"];
+        $data["target_id"] = $request["target_id"] ?? null;
         $data["log_type"] = $request["log_type"];
         $data["note"] = $request["note"] ?? null;
         $data["status"] = $request["status"]; // 0 withdraw  1 deposit
