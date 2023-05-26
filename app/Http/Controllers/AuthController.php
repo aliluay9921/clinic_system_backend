@@ -72,4 +72,10 @@ class AuthController extends Controller
 
         return $this->send_response(200, 'تم تسجيل الدخول بنجاح', [], User::find($user->id), $token);
     }
+
+
+    public function getAuthData()
+    {
+        return $this->send_response(200, 'تم جلب بيانات المستخدم بنجاح', [], User::find(auth()->user()->id));
+    }
 }

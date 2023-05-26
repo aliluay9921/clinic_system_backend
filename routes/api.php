@@ -52,6 +52,7 @@ Route::middleware(['auth:api'])->group(function () {
             Route::post('add_clinic', 'addClinic');
             Route::put('edit_clinic', 'editClinic');
             Route::delete('delete_clinic', 'deleteClinic');
+            Route::post("get_image_clinic", "getImageClinic");
         });
     });
 

@@ -17,12 +17,4 @@ class Clinic extends Model
     {
         return $this->hasMany(User::class, 'clinic_id');
     }
-
-
-    public function getLogoAttrebute()
-    {
-        $path = public_path() . $this->logo;
-        $base64Data = base64_encode(file_get_contents($path));
-        return $base64Data;
-    }
 }
