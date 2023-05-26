@@ -65,7 +65,7 @@ class ClinicController extends Controller
         return $this->send_response(200, 'تم حذف العيادة بنجاح', [], []);
     }
 
-    public function get_image_clinic(Request $request)
+    public function getImageClinic(Request $request)
     {
         $request = $request->json()->all();
         $clinic = Clinic::find($request['id']);
