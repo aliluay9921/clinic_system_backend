@@ -49,12 +49,14 @@ class StoreController extends Controller
         $data['product_name'] = $request['product_name'];
         $data['quantity'] = $request['quantity'];
         $data['price'] = $request['price'];
+        $data['buy_price'] = $request['buy_price'];
         $data['expaired'] = $request['expaired'];
+
 
         $data['representative_id'] = $request['representative_id'] ?? null;
         $data['company'] = $request['company'] ?? null;
         $data['note'] = $request['note'] ?? null;
-        $data['description'] = $request['dexdescription'] ?? null;
+        $data['description'] = $request['description'] ?? null;
         $data['clinic_id'] = auth()->user()->clinic_id;
 
         $store = Store::create($data);
@@ -75,6 +77,7 @@ class StoreController extends Controller
         $data['quantity'] = $request['quantity'];
         $data['price'] = $request['price'];
         $data['expaired'] = $request['expaired'];
+        $data['buy_price'] = $request['buy_price'];
 
         $data['representative_id'] = $request['representative_id'] ?? $store->representative_id;
         $data['company'] = $request['company'] ?? $store->company;

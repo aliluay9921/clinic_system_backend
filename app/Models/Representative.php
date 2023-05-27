@@ -14,12 +14,16 @@ class Representative extends Model
 
     protected $guarded = [];
     protected $date = ["deleted_at"];
-    protected $appends = ['paided'];
+    protected $appends = ['paided', 'depted'];
 
 
     public function getpaidedAttribute()
     {
-        return Log::where("target_id", $this->id)->where("log_type", 0)->sum("value");
+        return Log::where("target_id", $this->id)->where("log_type", 2)->where("status", 0)->sum("value");
+    }
+    public function getdeptedAttribute()
+    {
+        return Store::where("representative_id", $this->id)->sum("buy_price");
     }
 
     public function clinic()

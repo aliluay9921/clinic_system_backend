@@ -251,6 +251,11 @@ class BookingController extends Controller
         if (isset($_GET["filter"])) {
             $archives = $this->filter($archives, $_GET["filter"]);
         }
+        if (isset($_GET["doctor_id"])) {
+            $archives = $archives->whereHas('booking', function ($q) {
+                $q->where("doctor_id", $_GET["doctor_id"]);
+            });
+        }
         if (isset($_GET["order_by"])) {
             $archives = $this->order_by($archives, $_GET);
         }
