@@ -11,6 +11,7 @@ use App\Traits\UploadImage;
 use App\Traits\SendResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreRequest;
+use Carbon\Carbon;
 
 class StoreController extends Controller
 {
@@ -19,6 +20,26 @@ class StoreController extends Controller
     public function getStores()
     {
         $stores = Store::with('represntatives')->where("clinic_id", auth()->user()->clinic_id);
+        if (isset($_GET["query"])) {
+            $this->search($stores, 'stores');
+        }
+        if (isset($_GET['filter'])) {
+            $this->filter($stores, $_GET["filter"]);
+        }
+        if (isset($_GET)) {
+            $this->order_by($stores, $_GET);
+        }
+        if (!isset($_GET['skip']))
+            $_GET['skip'] = 0;
+        if (!isset($_GET['limit']))
+            $_GET['limit'] = 10;
+        $res = $this->paging($stores->orderBy("created_at", "DESC"),  $_GET['skip'],  $_GET['limit']);
+        return $this->send_response(200, 'تم جلب المنتجات في المخزن بنجاح', [], $res["model"], null, $res["count"]);
+    }
+    public function getStoresExpaired()
+    {
+        $stores = Store::whereDate("expaired", '<', Carbon::today()->addDays(30)->format("Y-m-d"))->with('represntatives')->where("clinic_id", auth()->user()->clinic_id);
+        // return Carbon::today()->addDays(30)->format("Y-m-d");
         if (isset($_GET["query"])) {
             $this->search($stores, 'stores');
         }
@@ -51,8 +72,6 @@ class StoreController extends Controller
         $data['price'] = $request['price'];
         $data['buy_price'] = $request['buy_price'];
         $data['expaired'] = $request['expaired'];
-
-
         $data['representative_id'] = $request['representative_id'] ?? null;
         $data['company'] = $request['company'] ?? null;
         $data['note'] = $request['note'] ?? null;

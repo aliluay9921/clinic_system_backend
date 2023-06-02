@@ -44,7 +44,6 @@ class StoreRequest extends FormRequest
                 'price' => 'required',
                 'expaired' => 'required',
                 'buy_price' => 'required',
-
                 'representative_id' => 'exists:representatives,id'
 
             ];

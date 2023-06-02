@@ -66,6 +66,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::controller(StoreController::class)->group(function () {
 
         Route::get('get_stores', 'getStores');
+        Route::get('get_stores_expaired', 'getStoresExpaired');
         Route::post('add_to_store', 'addToStore');
         Route::put('edit_store', 'updateStore');
         Route::delete('delete_store', 'deleteStore');
